@@ -1,0 +1,21 @@
+FROM node:14-bullseye-slim
+
+WORKDIR /app
+
+# Install native build tools for compiling binary addons (e.g. bison, websocket)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY package*.json ./
+RUN npm install --production
+
+COPY shared/ ./shared/
+COPY server/ ./server/
+
+EXPOSE 39000
+
+ENV BQ_PORT=39000
+CMD ["node", "server/js/main.js", "./server/config_docker.json"]

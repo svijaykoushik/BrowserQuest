@@ -68,19 +68,32 @@ define(['area'], function(Area) {
         load: function (basePath, name, loaded_callback, channels) {
             var path = basePath + name + "." + this.extension,
                 sound = document.createElement('audio'),
-                self = this;
+                self = this,
+                completed = false;
             
-            sound.addEventListener('canplaythrough', function (e) {
-                this.removeEventListener('canplaythrough', arguments.callee, false);
+            var onLoaded = function () {
+                if(completed) return;
+                completed = true;
+                sound.removeEventListener('canplaythrough', onLoaded, false);
                 log.debug(path + " is ready to play.");
                 if(loaded_callback) {
                     loaded_callback();
                 }
-            }, false);
-            sound.addEventListener('error', function (e) {
-                log.error("Error: "+ path +" could not be loaded.");
+            };
+
+            var onError = function () {
+                if(completed) return;
+                completed = true;
+                sound.removeEventListener('error', onError, false);
+                log.debug("Notice: "+ path +" could not be loaded or was skipped.");
                 self.sounds[name] = null;
-            }, false);
+                if(loaded_callback) {
+                    loaded_callback();
+                }
+            };
+            
+            sound.addEventListener('canplaythrough', onLoaded, false);
+            sound.addEventListener('error', onError, false);
         
             sound.preload = "auto";
             sound.autobuffer = true;
@@ -99,9 +112,15 @@ define(['area'], function(Area) {
     
         loadMusic: function(name, handleLoaded) {
             this.load("audio/music/", name, handleLoaded, 1);
-            var music = this.sounds[name][0];
-            music.loop = true;
-            music.addEventListener('ended', function() { music.play() }, false);
+            if(this.sounds[name] && this.sounds[name][0]) {
+                var music = this.sounds[name][0];
+                music.loop = true;
+                music.addEventListener('ended', function() {
+                    if(music && music.play) {
+                        try { music.play(); } catch(e) {}
+                    }
+                }, false);
+            }
         },
     
         getSound: function(name) {
