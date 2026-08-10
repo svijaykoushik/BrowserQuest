@@ -7,12 +7,12 @@ function(build) {
     } catch(e) {}
 
     var defaultHost = (typeof window !== 'undefined' && window.location && window.location.hostname) ? window.location.hostname : "localhost";
-    var defaultPort = (typeof window !== 'undefined' && window.location && window.location.port) ? parseInt(window.location.port, 10) : (parsedBuild.port || 39080);
+    var defaultPort = (typeof window !== 'undefined' && window.location && window.location.port) ? parseInt(window.location.port, 10) : (parsedBuild.port || 80);
 
     var config = {
         dev: {
-            host: parsedBuild.host || defaultHost,
-            port: parsedBuild.port || defaultPort,
+            host: (parsedBuild && parsedBuild.host) ? parsedBuild.host : defaultHost,
+            port: (parsedBuild && parsedBuild.port) ? parsedBuild.port : defaultPort,
             dispatcher: false
         },
         build: parsedBuild
@@ -22,6 +22,12 @@ function(build) {
     require(['text!../config/config_local.json'], function(local) {
         try {
             config.local = JSON.parse(local);
+            if (!config.local.host) {
+                config.local.host = defaultHost;
+            }
+            if (!config.local.port) {
+                config.local.port = defaultPort;
+            }
             if (config.local.host) config.dev.host = config.local.host;
             if (config.local.port) config.dev.port = config.local.port;
         } catch(e) {

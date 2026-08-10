@@ -16,7 +16,10 @@ function(Camera, Item, Character, Player, Timer) {
             this.initFPS();
             this.tilesize = 16;
         
-            this.upscaledRendering = this.context.mozImageSmoothingEnabled !== undefined;
+            this.upscaledRendering = (this.context.imageSmoothingEnabled !== undefined ||
+                                      this.context.mozImageSmoothingEnabled !== undefined ||
+                                      this.context.webkitImageSmoothingEnabled !== undefined ||
+                                      this.context.msImageSmoothingEnabled !== undefined);
             this.supportsSilhouettes = this.upscaledRendering;
         
             this.rescale(this.getScaleFactor());
@@ -73,9 +76,44 @@ function(Camera, Item, Character, Player, Timer) {
         
             this.createCamera();
         
-            this.context.mozImageSmoothingEnabled = false;
-            this.background.mozImageSmoothingEnabled = false;
-            this.foreground.mozImageSmoothingEnabled = false;
+            if(this.context.imageSmoothingEnabled !== undefined) {
+                this.context.imageSmoothingEnabled = false;
+            }
+            if(this.context.mozImageSmoothingEnabled !== undefined) {
+                this.context.mozImageSmoothingEnabled = false;
+            }
+            if(this.context.webkitImageSmoothingEnabled !== undefined) {
+                this.context.webkitImageSmoothingEnabled = false;
+            }
+            if(this.context.msImageSmoothingEnabled !== undefined) {
+                this.context.msImageSmoothingEnabled = false;
+            }
+
+            if(this.background.imageSmoothingEnabled !== undefined) {
+                this.background.imageSmoothingEnabled = false;
+            }
+            if(this.background.mozImageSmoothingEnabled !== undefined) {
+                this.background.mozImageSmoothingEnabled = false;
+            }
+            if(this.background.webkitImageSmoothingEnabled !== undefined) {
+                this.background.webkitImageSmoothingEnabled = false;
+            }
+            if(this.background.msImageSmoothingEnabled !== undefined) {
+                this.background.msImageSmoothingEnabled = false;
+            }
+
+            if(this.foreground.imageSmoothingEnabled !== undefined) {
+                this.foreground.imageSmoothingEnabled = false;
+            }
+            if(this.foreground.mozImageSmoothingEnabled !== undefined) {
+                this.foreground.mozImageSmoothingEnabled = false;
+            }
+            if(this.foreground.webkitImageSmoothingEnabled !== undefined) {
+                this.foreground.webkitImageSmoothingEnabled = false;
+            }
+            if(this.foreground.msImageSmoothingEnabled !== undefined) {
+                this.foreground.msImageSmoothingEnabled = false;
+            }
         
             this.initFont();
             this.initFPS();

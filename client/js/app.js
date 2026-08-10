@@ -87,15 +87,17 @@ define(['jquery', 'storage'], function($, Storage) {
             
             if(username && !this.game.started) {
                 var optionsSet = false,
-                    config = this.config;
+                    config = this.config,
+                    locHost = (typeof window !== 'undefined' && window.location && window.location.hostname) || "localhost",
+                    locPort = (typeof window !== 'undefined' && window.location && window.location.port ? parseInt(window.location.port, 10) : 80);
 
                 //>>includeStart("devHost", pragmas.devHost);
                 if(config.local) {
                     log.debug("Starting game with local dev config.");
-                    this.game.setServerOptions(config.local.host, config.local.port, username);
-                } else {
+                    this.game.setServerOptions(config.local.host || locHost, config.local.port || locPort, username);
+                } else if(config.dev) {
                     log.debug("Starting game with default dev config.");
-                    this.game.setServerOptions(config.dev.host, config.dev.port, username);
+                    this.game.setServerOptions(config.dev.host || locHost, config.dev.port || locPort, username);
                 }
                 optionsSet = true;
                 //>>includeEnd("devHost");
@@ -103,7 +105,7 @@ define(['jquery', 'storage'], function($, Storage) {
                 //>>includeStart("prodHost", pragmas.prodHost);
                 if(!optionsSet) {
                     log.debug("Starting game with build config.");
-                    this.game.setServerOptions(config.build.host, config.build.port, username);
+                    this.game.setServerOptions((config.build && config.build.host) || locHost, (config.build && config.build.port) || locPort, username);
                 }
                 //>>includeEnd("prodHost");
 

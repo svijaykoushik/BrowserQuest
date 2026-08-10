@@ -332,7 +332,11 @@ Mozilla presents an HTML5 mini-MMORPG by Little Workshop http://www.littleworksh
                 parchment.className = "error";
             }
             
-            if(ctx.mozImageSmoothingEnabled === undefined) {
+            var supportsSmoothingControl = ctx.imageSmoothingEnabled !== undefined ||
+                                           ctx.mozImageSmoothingEnabled !== undefined ||
+                                           ctx.webkitImageSmoothingEnabled !== undefined ||
+                                           ctx.msImageSmoothingEnabled !== undefined;
+            if(!supportsSmoothingControl) {
                 document.querySelector('body').className += ' upscaled';
             }
             
