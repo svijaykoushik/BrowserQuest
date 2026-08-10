@@ -1,0 +1,59 @@
+{
+  "name": "BrowserQuest",
+  "short_name": "BrowserQuest",
+  "id": "mozilla.browserquest",
+  "description": "A multiplayer adventure RPG experiment powered by HTML5 WebSockets and Canvas.",
+  "start_url": "./client/index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#000000",
+  "theme_color": "#222222",
+  "categories": ["games", "role-playing", "multiplayer", "adventure"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "client/img/common/favicon.png",
+      "sizes": "16x16 32x32",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "client/img/common/screenshot.jpg",
+      "sizes": "640x400",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "client/img/common/promo-title.jpg",
+      "sizes": "640x360",
+      "type": "image/jpeg"
+    }
+  ],
+  "game": {
+    "genre": "MMORPG",
+    "subgenre": "Action RPG / Adventure",
+    "developer": "Little Workshop (Franck Lecollinet, Guillaume Lecollinet) / Mozilla",
+    "license": "MPL-2.0 (Code), CC-BY-SA 3.0 (Content)",
+    "repository": "https://github.com/mozilla/BrowserQuest",
+    "upstream_repository": "https://github.com/mozilla/BrowserQuest.git",
+    "entry_point": "client/index.html",
+    "server_entry_point": "server/js/main.js",
+    "multiplayer": true,
+    "tech_stack": ["HTML5 Canvas", "WebSockets", "Web Audio API", "Node.js", "BiSON"],
+    "controls": {
+      "mouse": ["Click to move", "Click on NPC/enemy to interact/attack", "Click on item to collect/use"],
+      "keyboard": ["Enter to open/send chat", "Space/Number shortcuts"],
+      "touch": ["Tap to move", "Tap to interact/attack"]
+    },
+    "features": [
+      "Real-time multiplayer synchronization via WebSockets",
+      "Dynamic 2D tile map rendering with sprite animation",
+      "Inventory, weapon/armor progression, and achievements",
+      "Spatialized HTML5 Web Audio and sound effects",
+      "In-game chat and player interaction"
+    ]
+  }
+}

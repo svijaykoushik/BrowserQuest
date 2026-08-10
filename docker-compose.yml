@@ -1,47 +1,40 @@
 services:
-  server:
+  browserquest-server:
     build:
       context: .
       dockerfile: Dockerfile.server
     image: browserquest-server:latest
     container_name: browserquest-server
     restart: unless-stopped
-    ports:
-      - "39000:39000"
+    networks:
+      default:
+        aliases:
+          - server
+          - browserquest-server
     healthcheck:
       test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:39000/status', (r) => { process.exit(r.statusCode === 200 ? 0 : 1); })\""]
-      interval: 15s
+      interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 10s
+      start_period: 5s
     deploy:
       resources:
         limits:
           cpus: '1.0'
           memory: 512M
-    networks:
-      - bq-stack-network
 
-  client:
+  browserquest-client:
     build:
       context: .
       dockerfile: Dockerfile.client
     image: browserquest-client:latest
     container_name: browserquest-client
     restart: unless-stopped
-    ports:
-      - "39080:80"
     depends_on:
-      server:
+      browserquest-server:
         condition: service_healthy
     deploy:
       resources:
         limits:
           cpus: '0.5'
           memory: 256M
-    networks:
-      - bq-stack-network
-
-networks:
-  bq-stack-network:
-    driver: bridge

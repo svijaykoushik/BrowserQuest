@@ -1,0 +1,19 @@
+id: browserquest
+name: BrowserQuest
+
+runtime:
+  type: docker
+  service: browserquest-client
+  port: 80
+
+hosting:
+  hostname: browserquest.localhost
+
+metadata:
+  genre: MMORPG
+  developer: Little Workshop / Mozilla
+  license: MPL-2.0 / CC-BY-SA 3.0
+  upstream: https://github.com/mozilla/BrowserQuest
+  multiplayer: true
+  icon: "⚔️"
+  description: A multiplayer adventure RPG experiment by Mozilla powered by HTML5 Canvas and WebSockets.
