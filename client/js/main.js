@@ -4,6 +4,32 @@ define(['jquery', 'app'], function($, App) {
 
     var initApp = function() {
         $(document).ready(function() {
+            const originalSetItem = localStorage.setItem.bind(localStorage);
+            localStorage.setItem = function(key, value) {
+                originalSetItem(key, value);
+                if (window.WGCP && key === 'data') {
+                    var parsed = value;
+                    try { parsed = JSON.parse(value); } catch(e) {}
+                    window.WGCP.storage.save(key, parsed);
+                }
+            };
+
+            const originalRemoveItem = localStorage.removeItem.bind(localStorage);
+            localStorage.removeItem = function(key) {
+                originalRemoveItem(key);
+                if (window.WGCP && key === 'data') {
+                    window.WGCP.storage.delete(key);
+                }
+            };
+
+            const originalClear = localStorage.clear.bind(localStorage);
+            localStorage.clear = function() {
+                originalClear();
+                if (window.WGCP) {
+                    window.WGCP.storage.delete('data');
+                }
+            };
+
         	app = new App();
             app.center();
         
@@ -405,5 +431,23 @@ define(['jquery', 'app'], function($, App) {
         });
     };
     
-    initApp();
+    if (window.WGCP) {
+        window.WGCP.init().then(function() {
+            const originalSetItem = localStorage.setItem.bind(localStorage);
+            return window.WGCP.storage.load("data").then(function(val) {
+                if (val) {
+                    originalSetItem("data", typeof val === 'string' ? val : JSON.stringify(val));
+                }
+                initApp();
+            }).catch(function(err) {
+                console.error("WGCP load failed, booting normally:", err);
+                initApp();
+            });
+        }).catch(function(e) {
+            console.error("WGCP init failed, booting normally:", e);
+            initApp();
+        });
+    } else {
+        initApp();
+    }
 });
