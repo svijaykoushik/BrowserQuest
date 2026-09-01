@@ -37,6 +37,9 @@ define(function() {
         save: function() {
             if(this.hasLocalStorage()) {
                 localStorage.data = JSON.stringify(this.data);
+                if (window.WGCP) {
+                    window.WGCP.storage.save('data', this.data);
+                }
             }
         },
     
@@ -44,6 +47,9 @@ define(function() {
             if(this.hasLocalStorage()) {
                 localStorage.data = "";
                 this.resetData();
+                if (window.WGCP) {
+                    window.WGCP.storage.delete('data');
+                }
             }
         },
     

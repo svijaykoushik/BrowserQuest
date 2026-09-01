@@ -433,10 +433,17 @@ define(['jquery', 'app'], function($, App) {
     
     if (window.WGCP) {
         window.WGCP.init().then(function() {
-            const originalSetItem = localStorage.setItem.bind(localStorage);
             return window.WGCP.storage.load("data").then(function(val) {
                 if (val) {
-                    originalSetItem("data", typeof val === 'string' ? val : JSON.stringify(val));
+                    var strVal = typeof val === 'string' ? val : JSON.stringify(val);
+                    localStorage.setItem("data", strVal);
+                    localStorage.data = strVal;
+                } else if (localStorage.data || localStorage.getItem("data")) {
+                    try {
+                        var raw = localStorage.data || localStorage.getItem("data");
+                        var parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+                        window.WGCP.storage.save("data", parsed);
+                    } catch(e) {}
                 }
                 initApp();
             }).catch(function(err) {
