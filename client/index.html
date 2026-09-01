@@ -40,33 +40,6 @@ Mozilla presents an HTML5 mini-MMORPG by Little Workshop http://www.littleworksh
         <script src="js/detect.js" type="text/javascript"></script>
         <script src="http://wgcp-sdk.localhost/wgcp-sdk.js" type="text/javascript"></script>
         <title>BrowserQuest</title>
-        <script>
-            if (window.self !== window.top) {
-                window.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        var correlationId = (function() {
-                            if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-                                try { return crypto.randomUUID(); } catch (err) {}
-                            }
-                            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                                return v.toString(16);
-                            });
-                        })();
-                        var urlParams = new URLSearchParams(window.location.search);
-                        var portalOrigin = urlParams.get('wgcp_origin') || 'http://localhost';
-                        window.parent.postMessage({
-                            id: correlationId,
-                            type: 'WGCP_TOGGLE_MENU',
-                            source: 'WGCP_SDK',
-                            version: '2.0.0'
-                        }, portalOrigin);
-                    }
-                }, true);
-            }
-        </script>
 	</head>
     <!--[if lt IE 9]>
 	<body class="intro upscaled">
