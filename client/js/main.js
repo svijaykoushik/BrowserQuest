@@ -433,6 +433,22 @@ define(['jquery', 'app'], function($, App) {
     
     if (window.WGCP) {
         window.WGCP.init().then(function() {
+            // Register graceful platform teardown handler
+            window.WGCP.system.onPrepareExit(function() {
+                try {
+                    if (app && app.storage && typeof app.storage.save === 'function') {
+                        app.storage.save();
+                    }
+                    var raw = localStorage.data || localStorage.getItem("data");
+                    if (raw) {
+                        var parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+                        return window.WGCP.storage.save("data", parsed);
+                    }
+                } catch(e) {
+                    console.warn("BrowserQuest prepareExit flush warning:", e);
+                }
+            });
+
             return window.WGCP.storage.load("data").then(function(val) {
                 if (val) {
                     var strVal = typeof val === 'string' ? val : JSON.stringify(val);
