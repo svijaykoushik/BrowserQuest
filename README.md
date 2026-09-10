@@ -1,6 +1,9 @@
 BrowserQuest
 ============
 
+> [!NOTE]
+> **WGCP Integration**: This game has been forked and integrated into the [Web Game Console Platform (WGCP)](https://github.com/svijaykoushik/wgcp) using the WGCP SDK (`@wgcp/sdk`), supporting containerized orchestration, portal launcher embedding, and cloud platform features.
+
 BrowserQuest is a HTML5/JavaScript multiplayer game experiment.
 
 
